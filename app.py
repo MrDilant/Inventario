@@ -4,20 +4,27 @@ from archivos import guardar_csv, cargar_csv
 
 def validar_numero(mensaje, tipo=float):
     """Valida que la entrada sea numérica y no negativa."""
-    while True:
+    continuar_validacion = True
+    resultado = 0
+    
+    while continuar_validacion:
         try:
-            valor = tipo(input(mensaje))
+            entrada = input(mensaje)
+            valor = tipo(entrada)
             if valor < 0:
                 print("[!] El valor no puede ser negativo.")
-                continue
-            return valor
+            else:
+                resultado = valor
+                continuar_validacion = False  # Rompemos el ciclo de validación
         except ValueError:
             print("[!] Entrada inválida. Ingrese un número.")
+    return resultado
 
 def menu_principal():
     inventario = []
+    ejecutando = True  # Variable de control para el bucle principal
     
-    while True:
+    while ejecutando:
         print("\n=== SISTEMA DE GESTIÓN DE INVENTARIO ===")
         print("1. Agregar producto")
         print("2. Mostrar inventario")
@@ -82,7 +89,6 @@ def menu_principal():
                 if res == "S":
                     inventario = datos
                 else:
-                    # Fusión: Actualizar si existe, si no, agregar
                     for p_nuevo in datos:
                         p_viejo = buscar_producto(inventario, p_nuevo['nombre'])
                         if p_viejo:
@@ -94,10 +100,10 @@ def menu_principal():
 
         elif opcion == "9":
             print("Saliendo del sistema...")
-            # Resumen final (Objetivo de la semana)
-            # Este programa permite gestionar un inventario completo con persistencia en archivos,
-            # aplicando validaciones, modularización y lógica de colecciones en Python.
-            break
+            ejecutando = False  # Cambiamos el estado para finalizar el bucle
+            # Objetivo de la semana: Gestionar inventarios mediante modularización,
+            # validaciones robustas y persistencia de datos en archivos CSV.
+
         else:
             print("[!] Opción no válida.")
 
